@@ -23,7 +23,7 @@ Build Package:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - mvn clean package -U -Dhttp.proxy=$HTTP_PROXY -Dhttps.proxy=$HTTPS_PROXY
+    - mvn clean package -U -Dhttp.proxyHost=tinyproxy -Dhttp.proxyPort=8888 -Dhttps.proxyHost=tinyproxy -Dhttps.proxyPort=8888
   except:
     - master
     - develop
@@ -39,4 +39,4 @@ Deploy Snapshot:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - mvn deploy -DskipTests=true -Dhttp.proxy=$HTTP_PROXY -Dhttps.proxy=$HTTPS_PROXY
+    - mvn deploy -DskipTests=true -Dhttp.proxyHost=tinyproxy -Dhttp.proxyPort=8888 -Dhttps.proxyHost=tinyproxy -Dhttps.proxyPort=8888
