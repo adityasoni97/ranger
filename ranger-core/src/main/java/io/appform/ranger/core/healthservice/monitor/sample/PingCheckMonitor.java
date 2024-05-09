@@ -40,7 +40,8 @@ import java.util.concurrent.*;
 @Slf4j
 @SuppressWarnings("unused")
 public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
-    
+
+    public static final String HTTP_PROXY = "httpProxy";
     private final HttpRequest httpRequest;
     private final String host;
     private final ExecutorService executorService;
@@ -75,16 +76,7 @@ public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
         this.executorService = Executors.newSingleThreadExecutor();
         val connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost(host, port)), 2);
-        String useProxy = System.getProperty("useHttpProxy");
-        boolean useHttpProxy = !Strings.isNullOrEmpty(useProxy) && Boolean.parseBoolean(useProxy);
-        HttpClientBuilder httpClientBuilder = HttpClients.custom()
-                .setConnectionManager(connectionManager);
-        if (useHttpProxy) {
-            String proxyHost = System.getProperty("proxyHost");
-            int proxyPort = Integer.parseInt(System.getProperty("proxyPort"));
-            httpClientBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
-        }
-        this.httpClient = httpClientBuilder.build();
+        this.httpClient = getHttpClient(connectionManager);
     }
 
     @Override
@@ -134,5 +126,16 @@ public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
             log.error("Exception while executing HttpRequest: ", e);
             return false;
         }
+    }
+
+    private CloseableHttpClient getHttpClient(PoolingHttpClientConnectionManager connectionManager) {
+        final CloseableHttpClient httpClient;
+        HttpClientBuilder httpClientBuilder = HttpClients.custom()
+            .setConnectionManager(connectionManager);
+        String httpProxy = System.getProperty(HTTP_PROXY);
+        if (httpProxy != null) {
+            httpClientBuilder.setProxy(HttpHost.create(httpProxy));
+        }
+        return httpClientBuilder.build();
     }
 }
