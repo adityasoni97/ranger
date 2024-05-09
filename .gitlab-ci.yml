@@ -23,7 +23,6 @@ Build Package:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - ping google.com
     - mvn clean package -U -Dhttp.proxy=$HTTP_PROXY -Dhttps.proxy=$HTTPS_PROXY
   except:
     - master
@@ -40,5 +39,4 @@ Deploy Snapshot:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - ping google.com
     - mvn deploy -DskipTests=true -Dhttp.proxy=$HTTP_PROXY -Dhttps.proxy=$HTTPS_PROXY
