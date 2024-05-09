@@ -17,7 +17,10 @@ package io.appform.ranger.client;
 
 import io.appform.ranger.client.utils.RangerHubTestUtils;
 import io.appform.ranger.core.model.Service;
+import io.appform.ranger.core.model.ServiceNode;
+import io.appform.ranger.core.units.TestNodeData;
 import io.appform.ranger.core.utils.RangerTestUtils;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.junit.jupiter.api.Assertions;
@@ -32,7 +35,7 @@ class AbstractRangerHubClientTest {
     void testAbstractHubClient() {
         val testAbstractHub = RangerHubTestUtils.getTestHub();
         testAbstractHub.start();
-        var node = testAbstractHub.getNode(service).orElse(null);
+        ServiceNode<TestNodeData> node = testAbstractHub.getNode(service).orElse(null);
         Assertions.assertNotNull(node);
         Assertions.assertTrue(node.getHost().equalsIgnoreCase("localhost"));
         Assertions.assertEquals(9200, node.getPort());

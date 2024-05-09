@@ -33,7 +33,8 @@ class CriteriaUtilsTest {
     void testGetCriteria(){
         val initialCriteria = getCriteria(1);
         val argCriteria = getCriteria(2);
-        var mergedCriteria = CriteriaUtils.getCriteria(true, initialCriteria, argCriteria);
+        Predicate<TestNodeData> mergedCriteria = CriteriaUtils.getCriteria(true, initialCriteria,
+            argCriteria);
         Assertions.assertFalse(mergedCriteria.test(TestNodeData.builder().shardId(1).build()));
         Assertions.assertFalse(mergedCriteria.test(TestNodeData.builder().shardId(2).build()));
         mergedCriteria = CriteriaUtils.getCriteria(false, initialCriteria, argCriteria);
