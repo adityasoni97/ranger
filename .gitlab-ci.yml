@@ -23,7 +23,7 @@ Build Package:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - mvn clean package -U -DhttpProxy=http://tinyproxy:8888
+    - mvn clean package -U -DhttpProxy=$HTTP_PROXY
   except:
     - master
     - develop
@@ -39,4 +39,4 @@ Deploy Snapshot:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - mvn deploy -DskipTests=true -DhttpProxy=http://tinyproxy:8888
+    - mvn deploy -DskipTests=true -DhttpProxy=$HTTP_PROXY
