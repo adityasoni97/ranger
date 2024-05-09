@@ -23,7 +23,7 @@ Build Package:
   script:
     - echo $HTTP_PROXY
     - echo $HTTPS_PROXY
-    - curl -XGET https://www.google.com/
+    - ping google.com
     - mvn clean package -U -Dhttp.proxy=$HTTP_PROXY -Dhttps.proxy=$HTTPS_PROXY
   except:
     - master
