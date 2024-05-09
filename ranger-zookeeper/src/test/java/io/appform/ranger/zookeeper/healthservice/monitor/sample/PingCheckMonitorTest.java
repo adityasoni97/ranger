@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-@Disabled("Temporarily disable die to proxy issue")
 class PingCheckMonitorTest {
 
     @Test

@@ -15,6 +15,7 @@
  */
 package io.appform.ranger.core.healthservice.monitor.sample;
 
+import com.google.common.base.Strings;
 import io.appform.ranger.core.healthcheck.HealthcheckStatus;
 import io.appform.ranger.core.healthservice.TimeEntity;
 import io.appform.ranger.core.healthservice.monitor.IsolatedHealthMonitor;
@@ -26,6 +27,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
@@ -73,9 +75,16 @@ public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
         this.executorService = Executors.newSingleThreadExecutor();
         val connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost(host, port)), 2);
-        this.httpClient = HttpClients.custom()
-                .setConnectionManager(connectionManager)
-                .build();
+        String useProxy = System.getProperty("useHttpProxy");
+        boolean useHttpProxy = !Strings.isNullOrEmpty(useProxy) && Boolean.parseBoolean(useProxy);
+        HttpClientBuilder httpClientBuilder = HttpClients.custom()
+                .setConnectionManager(connectionManager);
+        if (useHttpProxy) {
+            String proxyHost = System.getProperty("proxyHost");
+            int proxyPort = Integer.parseInt(System.getProperty("proxyPort"));
+            httpClientBuilder.setProxy(new HttpHost(proxyHost, proxyPort));
+        }
+        this.httpClient = httpClientBuilder.build();
     }
 
     @Override
