@@ -31,7 +31,7 @@ class PingCheckMonitorTest {
     void testMonitor() {
         val httpRequest = new HttpGet("/");
         val pingCheckMonitor = new PingCheckMonitor(new TimeEntity(2, TimeUnit.SECONDS),
-            httpRequest, 5000, 5, 3, "artifactory.phonepe.com", 443);
+            httpRequest, 5000, 5, 3, "google.com", 80);
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
@@ -43,7 +43,7 @@ class PingCheckMonitorTest {
     @Test
     void testMonitor2() {
         val httpRequest = new HttpGet("/help");
-        val pingCheckMonitor = new PingCheckMonitor(new TimeEntity(2, TimeUnit.SECONDS), httpRequest, 5000, 5, 3, "artifactory.phonepe.com", 443);
+        val pingCheckMonitor = new PingCheckMonitor(new TimeEntity(2, TimeUnit.SECONDS), httpRequest, 5000, 5, 3, "google.com", 80);
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.unhealthy, pingCheckMonitor.monitor());
