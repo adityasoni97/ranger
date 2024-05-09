@@ -21,7 +21,7 @@ Build Package:
   <<: *default
   <<: *default_tag
   script:
-    - mvn clean package -U --build-arg http_proxy="http://tinyproxy:8888" --build-arg https_proxy="http://tinyproxy:8888" --build-arg HTTP_PROXY="http://tinyproxy:8888" --build-arg HTTPS_PROXY="http://tinyproxy:8888"
+    - mvn clean package -U -Dhttp.proxy="http://tinyproxy:8888" -Dhttps.proxy="http://tinyproxy:8888"
   except:
     - master
     - develop
@@ -35,4 +35,4 @@ Deploy Snapshot:
   <<: *default_tag
   <<: *default
   script:
-    - mvn deploy -DskipTests=true
+    - mvn deploy -DskipTests=true -Dhttp.proxy="http://tinyproxy:8888" -Dhttps.proxy="http://tinyproxy:8888"
