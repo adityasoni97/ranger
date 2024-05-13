@@ -34,6 +34,7 @@ import io.dropwizard.setup.AdminEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.val;
+import lombok.var;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.junit.jupiter.api.*;
 
@@ -92,9 +93,9 @@ public class RangerServerBundleTest {
 
     @Test
     void testRangerBundle() {
-        RangerHubClient<TestNodeData, ListBasedServiceRegistry<TestNodeData>> hub = RANGER_SERVER_BUNDLE.getHubs().get(0);
+        var hub = RANGER_SERVER_BUNDLE.getHubs().get(0);
         Assertions.assertTrue(hub instanceof RangerTestHub);
-        ServiceNode<TestNodeData> node = hub.getNode(service).orElse(null);
+        var node = hub.getNode(service).orElse(null);
         Assertions.assertNotNull(node);
         Assertions.assertTrue(node.getHost().equalsIgnoreCase("localhost"));
         Assertions.assertEquals(9200, node.getPort());

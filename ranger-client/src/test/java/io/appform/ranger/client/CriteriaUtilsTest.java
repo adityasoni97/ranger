@@ -18,6 +18,7 @@ package io.appform.ranger.client;
 import io.appform.ranger.client.utils.CriteriaUtils;
 import io.appform.ranger.core.units.TestNodeData;
 import lombok.val;
+import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,8 +34,7 @@ class CriteriaUtilsTest {
     void testGetCriteria(){
         val initialCriteria = getCriteria(1);
         val argCriteria = getCriteria(2);
-        Predicate<TestNodeData> mergedCriteria = CriteriaUtils.getCriteria(true, initialCriteria,
-            argCriteria);
+        var mergedCriteria = CriteriaUtils.getCriteria(true, initialCriteria, argCriteria);
         Assertions.assertFalse(mergedCriteria.test(TestNodeData.builder().shardId(1).build()));
         Assertions.assertFalse(mergedCriteria.test(TestNodeData.builder().shardId(2).build()));
         mergedCriteria = CriteriaUtils.getCriteria(false, initialCriteria, argCriteria);

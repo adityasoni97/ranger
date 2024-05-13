@@ -21,19 +21,16 @@ import io.appform.ranger.core.healthservice.monitor.sample.PingCheckMonitor;
 import lombok.val;
 import org.apache.http.client.methods.HttpGet;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-@Disabled("Temporary disabled due to proxy issue")
 class PingCheckMonitorTest {
 
     @Test
     void testMonitor() {
         val httpRequest = new HttpGet("/");
-        val pingCheckMonitor = new PingCheckMonitor(new TimeEntity(2, TimeUnit.SECONDS),
-            httpRequest, 5000, 5, 3, "google.com", 80);
+        val pingCheckMonitor = new PingCheckMonitor(new TimeEntity(2, TimeUnit.SECONDS), httpRequest, 5000, 5, 3, "google.com", 80);
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());
         Assertions.assertEquals(HealthcheckStatus.healthy, pingCheckMonitor.monitor());

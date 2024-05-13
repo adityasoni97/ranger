@@ -15,7 +15,6 @@
  */
 package io.appform.ranger.core.healthservice.monitor.sample;
 
-import com.google.common.base.Strings;
 import io.appform.ranger.core.healthcheck.HealthcheckStatus;
 import io.appform.ranger.core.healthservice.TimeEntity;
 import io.appform.ranger.core.healthservice.monitor.IsolatedHealthMonitor;
@@ -27,7 +26,6 @@ import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
@@ -41,7 +39,6 @@ import java.util.concurrent.*;
 @SuppressWarnings("unused")
 public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
 
-    public static final String HTTP_PROXY = "httpProxy";
     private final HttpRequest httpRequest;
     private final String host;
     private final ExecutorService executorService;
@@ -76,7 +73,9 @@ public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
         this.executorService = Executors.newSingleThreadExecutor();
         val connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxPerRoute(new HttpRoute(new HttpHost(host, port)), 2);
-        this.httpClient = getHttpClient(connectionManager);
+        this.httpClient = HttpClients.custom()
+                .setConnectionManager(connectionManager)
+                .build();
     }
 
     @Override
@@ -126,16 +125,5 @@ public class PingCheckMonitor extends IsolatedHealthMonitor<HealthcheckStatus> {
             log.error("Exception while executing HttpRequest: ", e);
             return false;
         }
-    }
-
-    private CloseableHttpClient getHttpClient(PoolingHttpClientConnectionManager connectionManager) {
-        final CloseableHttpClient httpClient;
-        HttpClientBuilder httpClientBuilder = HttpClients.custom()
-            .setConnectionManager(connectionManager);
-        String httpProxy = System.getProperty(HTTP_PROXY);
-        if (httpProxy != null) {
-            httpClientBuilder.setProxy(HttpHost.create(httpProxy));
-        }
-        return httpClientBuilder.build();
     }
 }
